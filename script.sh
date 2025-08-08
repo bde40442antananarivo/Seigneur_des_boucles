@@ -1,5 +1,5 @@
 #!/bin/bash
-EXEC="./code/a.out"
+EXEC="./code/gollum"
 ARG="125000,4000000"
 REF_FILE="reference.out"
 TMP_OUTPUT="output.txt"
@@ -34,8 +34,7 @@ while IFS= read -r FUNC; do
       FOUND=1
     fi
   fi
-done < "$FORBIDDEN_FILE"
-
+done <"$FORBIDDEN_FILE"
 
 [ "$FOUND" -eq 1 ] && exit 1
 echo "✅ Aucune fonction interdite utilisée."
@@ -46,7 +45,7 @@ if [ ! -x "$EXEC" ]; then
   exit 1
 fi
 
-IFS=',' read -ra VALUES <<< "$ARG"
+IFS=',' read -ra VALUES <<<"$ARG"
 
 for val in "${VALUES[@]}"; do
   val=$(echo "$val" | xargs) # clean all space
@@ -54,7 +53,7 @@ for val in "${VALUES[@]}"; do
   echo "🚀 Exécution avec ARG = $val..."
 
   START=$(date +%s.%N)
-  $EXEC "$val" > "$TMP_OUTPUT"
+  $EXEC "$val" >"$TMP_OUTPUT"
   END=$(date +%s.%N)
   TIME=$(echo "$END - $START" | bc)
 
@@ -76,6 +75,5 @@ for val in "${VALUES[@]}"; do
 
   echo "⏱️ Temps d'exécution : $TIME secondes"
 done
-
 
 echo "🎉 Tous les tests sont PASSÉS !"
